@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>G.G.R.F — Gestão Gerencial de Resultados Financeiros</title>
+<meta content="#10243A" name="theme-color"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- LOAD BAR -->
+<div id="loadBar"></div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+<!-- ═══════════════════════════════════════
+     TELA DE LOGIN
+═══════════════════════════════════════ -->
+<div id="loginPage" style="display:flex">
+<div class="lp-wrap">
+<!-- LADO ESQUERDO — AZUL COM LOGO -->
+<div class="lp-left">
+<!-- Hexágono decorativo de fundo -->
+<svg style="position:absolute;opacity:.08;width:340px;height:340px" viewbox="0 0 200 200">
+<polygon fill="none" points="100,10 172,52 172,138 100,180 28,138 28,52" stroke="#fff" stroke-width="3"></polygon>
+<polygon fill="none" points="100,28 158,62 158,128 100,162 42,128 42,62" stroke="#fff" stroke-width="1.5"></polygon>
+</svg>
+<!-- Logo principal -->
+<svg style="width:220px;height:220px;position:relative;z-index:1" viewbox="0 0 200 200">
+<polygon fill="none" opacity=".3" points="100,18 168,57 168,135 100,174 32,135 32,57" stroke="#fff" stroke-width="1.5"></polygon>
+<polygon fill="none" opacity=".15" points="100,32 155,63 155,126 100,157 45,126 45,63" stroke="#fff" stroke-width="1"></polygon>
+<text <text="" fill="#fff" font-family="Arial Black,sans-serif" font-size="22" font-weight="900" letter-spacing="2" text-anchor="middle" x="100" y="105">G.G.R.F</text>
+<line opacity=".4" stroke="#fff" stroke-width="1" x1="32" x2="86" y1="122" y2="122"></line>
+<polygon fill="#fff" opacity=".6" points="100,117 107,122 100,127 93,122"></polygon>
+<line opacity=".4" stroke="#fff" stroke-width="1" x1="114" x2="168" y1="122" y2="122"></line>
+<text fill="#fff" font-family="Arial,sans-serif" font-size="11" font-weight="500" letter-spacing="4" opacity=".75" text-anchor="middle" x="100" y="148">GRUPO</text>
+<text fill="#fff" font-family="Arial Black,sans-serif" font-size="15" font-weight="900" letter-spacing="3" opacity=".9" text-anchor="middle" x="100" y="165">FIBRAVIT</text>
+</svg>
+<div style="text-align:center;margin-top:20px;position:relative;z-index:1">
+<div style="font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;opacity:.9">GESTÃO GERENCIAL DE RESULTADOS FINANCEIROS</div>
+<div style="font-size:11px;font-weight:600;color:#f0c040;letter-spacing:1.5px;margin-top:4px">RESULTADOS &amp; INDICADORES</div>
+</div>
+<div style="position:absolute;bottom:16px;font-size:9px;color:rgba(255,255,255,.3)">Desenvolvido por Everest Consultoria em Gestão Empresarial</div>
+</div>
+<!-- LADO DIREITO — FORMULÁRIO BRANCO -->
+<div class="lp-right">
+<div class="lp-form">
+<div class="lp-title">Bem-vindo!</div>
+<div class="lp-sub">Faça login para acessar o sistema</div>
+<div class="lp-err" id="lp-err"></div>
+<label class="lp-label">E-mail</label>
+<input autocomplete="off" class="lp-input" id="loginEmail" placeholder="seu@email.com" type="email"/>
+<label class="lp-label">Senha</label>
+<input class="lp-input" id="loginPassword" onkeydown="if(event.key==='Enter') fazerLogin()" placeholder="••••••••" type="password"/>
+<button class="lp-btn" onclick="fazerLogin()">
+          🔐 Entrar
+        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- ═══════════════════════════════════════
+     SISTEMA PRINCIPAL
+═══════════════════════════════════════ -->
+<div id="app" style="display:none">
+<!-- TOPBAR -->
+<header class="topbar">
+<div class="topbar-top">
+<div>
+<div class="tb-title">G.G.R.F — Gestão Gerencial de Resultados Financeiros</div>
+<div class="tb-subtitle">Grupo FIBRAVIT</div>
+</div>
+<div class="tb-right">
+<span class="tb-badge">⬤ Firebase conectado</span>
+<div class="tb-user">
+<div class="tb-avatar" id="userAvatar">A</div>
+<span id="userName">Usuário</span>
+<span id="userRoleBadge" style="font-size:10px;color:#f0c040;font-weight:700;margin-left:4px"></span>
+</div>
+<button class="tb-logout" id="btnLogout">🚪 Sair</button>
+</div>
+</div>
+<!-- NAVBAR HORIZONTAL -->
+<nav class="navbar">
+<div class="nav-grp">
+<span class="nav-grp-label">Início</span>
+<button class="ni has-label active" data-module="dashboard">
+<span class="ico">📊</span><span class="lbl">Dashboard</span>
+</button>
+</div>
+<div class="nav-grp">
+<span class="nav-grp-label">Financeiro</span>
+<button class="ni has-label" data-module="dre">
+<span class="ico">📋</span><span class="lbl">DRE</span>
+</button>
+<button class="ni has-label" data-module="balanco">
+<span class="ico">⚖️</span><span class="lbl">Balanço</span>
+</button>
+</div>
+<div class="nav-grp">
+<span class="nav-grp-label">Orçamento</span>
+<button class="ni has-label" data-module="orcamento">
+<span class="ico">📊</span><span class="lbl">Orç. Estático</span>
+</button>
+<button class="ni has-label" data-module="provisionamento">
+<span class="ico">🔄</span><span class="lbl">Provisionamento</span>
+</button>
+</div>
+<div class="nav-grp">
+<span class="nav-grp-label">Gestão</span>
+<button class="ni has-label" data-module="indicadores">
+<span class="ico">📈</span><span class="lbl">Indicadores</span>
+</button>
+</div>
+<div class="nav-grp admin-diretor-only" style="display:none">
+<span class="nav-grp-label">Admin</span>
+<button class="ni has-label admin-only" data-module="usuarios" style="display:none">
+<span class="ico">👥</span><span class="lbl">Usuários</span>
+</button>
+<button class="ni has-label" data-module="configuracoes">
+<span class="ico">⚙️</span><span class="lbl">Config.</span>
+</button>
+</div>
+</nav>
+</header>
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="content">
+<!-- ═══ DASHBOARD DIÁRIO ═══ -->
+<div class="pg active" id="pg-dashboard">
+<div class="card" style="margin-bottom:18px">
+<div class="card-hd">
+<h2>📊 Visão Geral — Dashboard Diário</h2>
+<div style="display:flex;gap:10px;align-items:center">
+<select class="filter-select" id="dashCC" style="min-width:120px">
+<option value="geral">Geral</option>
+<option value="service">Service</option>
+<option value="fibravit">Fibravit</option>
+<option value="es">ES</option>
+<option value="pa">PA</option>
+<option value="ma">MA</option>
+</select>
+<span id="dashData" style="font-size:11px;color:#94a3b8;font-weight:600"></span>
+</div>
+</div>
+</div>
+<div class="kpi-grid">
+<div class="kpi"><div class="kpi-ico ic-az">💵</div>
+<div class="kpi-val"><h3 id="dash-resultado">—</h3><p>Resultado Líquido</p><small>Mês atual</small></div></div>
+<div class="kpi"><div class="kpi-ico ic-am">📊</div>
+<div class="kpi-val"><h3 id="dash-variacao">—</h3><p>Variação Média Ano</p><small>vs. Orçado</small></div></div>
+<div class="kpi"><div class="kpi-ico ic-vd">📈</div>
+<div class="kpi-val"><h3 id="dash-ebitda">—</h3><p>EBITDA</p><small>Mês atual</small></div></div>
+<div class="kpi"><div class="kpi-ico ic-rx">📅</div>
+<div class="kpi-val"><h3 id="dash-acumulado">—</h3><p>Resultado Acumulado</p><small>Ano 2026</small></div></div>
+</div>
+<div class="empty-state">
+<i class="fas fa-upload"></i>
+<h4>Nenhum dado importado ainda</h4>
+<p>Acesse o módulo <strong>DRE</strong> ou <strong>Fluxo de Caixa</strong> para importar os dados</p>
+</div>
+</div>
+<!-- ═══ DRE ═══ -->
+<div class="pg" id="pg-dre">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>📋 DRE — Orçado x Realizado</h2>
+</div>
+<div class="filter-bar" style="border:none;box-shadow:none;padding:0;margin:0;background:transparent">
+<div class="filter-group">
+<label>Centro de Custo</label>
+<select class="filter-select" id="dreCC">
+<option value="geral">Geral</option>
+<option value="service">Service</option>
+<option value="fibravit">Fibravit</option>
+<option value="es">ES</option>
+<option value="pa">PA</option>
+<option value="ma">MA</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Mês</label>
+<select class="filter-select" id="dreMes">
+<option value="01">Janeiro</option><option value="02">Fevereiro</option>
+<option value="03">Março</option><option value="04">Abril</option>
+<option value="05">Maio</option><option value="06">Junho</option>
+<option value="07">Julho</option><option value="08">Agosto</option>
+<option value="09">Setembro</option><option selected="" value="10">Outubro</option>
+<option value="11">Novembro</option><option value="12">Dezembro</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Ano</label>
+<select class="filter-select" id="dreAno">
+<option value="2025">2025</option>
+<option selected="" value="2026">2026</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Visão</label>
+<select class="filter-select" id="dreVisao">
+<option value="mensal">Mensal</option>
+<option value="acumulado">Acumulado</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Upload DRE -->
+<div class="upload-section" id="dreUploadSection">
+<div class="upload-box" id="dreDropZone">
+<i class="fas fa-cloud-upload-alt"></i>
+<h4>Importar Excel do DRE</h4>
+<p>Arraste o arquivo aqui ou clique para selecionar</p>
+<p class="upload-info"><i class="fas fa-info-circle"></i> O arquivo substituirá os dados do mesmo CC e mês</p>
+<input accept=".xlsx,.xls" id="dreFileInput" style="display:none" type="file"/>
+<button class="btn-upload" onclick="document.getElementById('dreFileInput').click()">
+<i class="fas fa-folder-open"></i> Selecionar Arquivo
+          </button>
+</div>
+<div class="upload-status" id="dreUploadStatus" style="display:none"></div>
+</div>
+<!-- Tabela DRE -->
+<div class="table-section" id="dreTableSection" style="display:none">
+<div class="table-header-bar">
+<span class="periodo-label" id="drePeriodoLabel"></span>
+<button class="btn-reimport" onclick="showDreUpload()">
+<i class="fas fa-sync-alt"></i> Reimportar
+          </button>
+</div>
+<div class="table-responsive">
+<table class="financial-table" id="dreTable">
+<thead>
+<tr>
+<th>Descrição</th>
+<th class="text-right">Orçado (R$)</th>
+<th class="text-right">Provisionado (R$)</th>
+<th class="text-right">Realizado (R$)</th>
+<th class="text-right">Var %</th>
+</tr>
+</thead>
+<tbody id="dreTableBody"></tbody>
+</table>
+</div>
+<!-- IA DRE -->
+<div class="ia-section" style="margin:16px;border-radius:8px">
+<div class="ia-header">
+<i class="fas fa-robot"></i>
+<h4>Análise &amp; Recomendações — IA</h4>
+<button class="btn-ia" onclick="gerarAnaliseIA('dre')">
+<i class="fas fa-magic"></i> Gerar Análise
+            </button>
+</div>
+<div class="ia-content" id="dreIAContent">
+<p class="ia-placeholder">Clique em "Gerar Análise" para obter insights automáticos sobre o DRE</p>
+</div>
+</div>
+</div>
+</div>
+<!-- ═══ BALANÇO PATRIMONIAL ═══ -->
+<div class="pg" id="pg-balanco">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>⚖️ Balanço Patrimonial Gerencial</h2>
+</div>
+<div class="filter-bar" style="border:none;box-shadow:none;padding:0;margin:0;background:transparent">
+<div class="filter-group">
+<label>Centro de Custo</label>
+<select class="filter-select" id="bpCC">
+<option value="geral">Geral</option><option value="service">Service</option>
+<option value="fibravit">Fibravit</option><option value="es">ES</option>
+<option value="pa">PA</option><option value="ma">MA</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Mês</label>
+<select class="filter-select" id="bpMes">
+<option value="01">Janeiro</option><option value="02">Fevereiro</option>
+<option value="03">Março</option><option value="04">Abril</option>
+<option value="05">Maio</option><option value="06">Junho</option>
+<option value="07">Julho</option><option value="08">Agosto</option>
+<option value="09">Setembro</option><option selected="" value="10">Outubro</option>
+<option value="11">Novembro</option><option value="12">Dezembro</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Ano</label>
+<select class="filter-select" id="bpAno">
+<option value="2025">2025</option><option selected="" value="2026">2026</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Upload Balanço -->
+<div class="upload-section" id="bpUploadSection">
+<div class="upload-box">
+<i class="fas fa-cloud-upload-alt"></i>
+<h4>Importar Excel do Balanço Patrimonial</h4>
+<p>Arraste o arquivo aqui ou clique para selecionar</p>
+<p class="upload-info"><i class="fas fa-info-circle"></i> O arquivo substituirá os dados do mesmo CC e mês</p>
+<input accept=".xlsx,.xls" id="bpFileInput" style="display:none" type="file"/>
+<button class="btn-upload" onclick="document.getElementById('bpFileInput').click()">
+<i class="fas fa-folder-open"></i> Selecionar Arquivo
+          </button>
+</div>
+</div>
+<!-- Conteúdo Balanço -->
+<div id="bpContent" style="display:none">
+<div class="bp-grid">
+<!-- ATIVO -->
+<div class="bp-column">
+<div class="bp-header blue">ATIVO</div>
+<div class="bp-group">
+<div class="bp-group-title">Ativo Circulante</div>
+<div class="bp-row"><span>Caixa</span><span id="bp-caixa">—</span></div>
+<div class="bp-row"><span>Clientes</span><span id="bp-clientes">—</span></div>
+<div class="bp-row"><span>Bancos</span><span id="bp-bancos">—</span></div>
+<div class="bp-row"><span>Aplicações Financeiras</span><span id="bp-aplicacoes">—</span></div>
+<div class="bp-row"><span>Estoque Produtos/Almoxarifado</span><span id="bp-estoque">—</span></div>
+<div class="bp-row subtotal"><span>Total Ativo Circulante</span><span id="bp-totalAC">—</span></div>
+</div>
+<div class="bp-group">
+<div class="bp-group-title">Realizável a Longo Prazo</div>
+<div class="bp-row"><span>Créditos Judiciais</span><span id="bp-creditosJudiciais">—</span></div>
+</div>
+<div class="bp-group">
+<div class="bp-group-title">Ativo Permanente</div>
+<div class="bp-row"><span>Máquinas e Equipamentos/Tanques</span><span id="bp-maquinas">—</span></div>
+<div class="bp-row"><span>Veículos/Tabela Fipe</span><span id="bp-veiculos">—</span></div>
+<div class="bp-row"><span>Instalações</span><span id="bp-instalacoes">—</span></div>
+<div class="bp-row"><span>Estoque Imobilizados/Sanitário</span><span id="bp-estoqueImob">—</span></div>
+<div class="bp-row subtotal"><span>Total Ativo Permanente</span><span id="bp-totalAP">—</span></div>
+</div>
+<div class="bp-total"><span>TOTAL ATIVO</span><span id="bp-totalAtivo">—</span></div>
+</div>
+<!-- PASSIVO -->
+<div class="bp-column">
+<div class="bp-header navy">PASSIVO</div>
+<div class="bp-group">
+<div class="bp-group-title">Passivo Circulante</div>
+<div class="bp-row"><span>Fornecedores</span><span id="bp-fornecedores">—</span></div>
+<div class="bp-row"><span>Impostos Municipais</span><span id="bp-impostosMun">—</span></div>
+<div class="bp-row"><span>Previsão de Impostos</span><span id="bp-previsaoImp">—</span></div>
+<div class="bp-row"><span>Empréstimos</span><span id="bp-emprestimos">—</span></div>
+<div class="bp-row"><span>Amortização</span><span id="bp-amortizacaoPC">—</span></div>
+<div class="bp-row"><span>Financiamentos</span><span id="bp-financiamentosPC">—</span></div>
+<div class="bp-row subtotal"><span>Total Passivo Circulante</span><span id="bp-totalPC">—</span></div>
+</div>
+<div class="bp-group">
+<div class="bp-group-title">Exigível a Longo Prazo</div>
+<div class="bp-row"><span>Amortização</span><span id="bp-amortizacaoLP">—</span></div>
+<div class="bp-row"><span>Financiamentos</span><span id="bp-financiamentosLP">—</span></div>
+<div class="bp-row"><span>Custas Trabalhistas</span><span id="bp-custasTrabalh">—</span></div>
+<div class="bp-row subtotal"><span>Total Exigível LP</span><span id="bp-totalELP">—</span></div>
+</div>
+<div class="bp-group">
+<div class="bp-group-title">Patrimônio Líquido</div>
+<div class="bp-row"><span>Patrimônio Líquido</span><span id="bp-pl">—</span></div>
+</div>
+<div class="bp-total"><span>TOTAL PASSIVO</span><span id="bp-totalPassivo">—</span></div>
+</div>
+</div>
+<!-- ÍNDICES DE LIQUIDEZ -->
+<div class="liquidez-section">
+<h4><i class="fas fa-calculator"></i> Índices de Liquidez</h4>
+<div class="liquidez-grid">
+<div class="liquidez-card" id="liq-ilg">
+<div class="liq-nome">ILG</div>
+<div class="liq-desc">Índice de Liquidez Geral</div>
+<div class="liq-formula">(AC + RLP) ÷ (PC + ELP)</div>
+<div class="liq-valor" id="val-ilg">—</div>
+<div class="liq-ref">Ref: &gt; 1,0</div>
+<div class="liq-status" id="status-ilg"></div>
+</div>
+<div class="liquidez-card" id="liq-ilg2">
+<div class="liq-nome">ILG2</div>
+<div class="liq-desc">Liquidez Geral 2</div>
+<div class="liq-formula">Total Ativo ÷ Total Passivo</div>
+<div class="liq-valor" id="val-ilg2">—</div>
+<div class="liq-ref">Ref: &gt; 1,0</div>
+<div class="liq-status" id="status-ilg2"></div>
+</div>
+<div class="liquidez-card" id="liq-ilc">
+<div class="liq-nome">ILC</div>
+<div class="liq-desc">Liquidez Corrente</div>
+<div class="liq-formula">AC ÷ PC</div>
+<div class="liq-valor" id="val-ilc">—</div>
+<div class="liq-ref">Ref: &gt; 1,5</div>
+<div class="liq-status" id="status-ilc"></div>
+</div>
+<div class="liquidez-card" id="liq-ils">
+<div class="liq-nome">ILS</div>
+<div class="liq-desc">Liquidez Seca</div>
+<div class="liq-formula">(AC − Estoque) ÷ PC</div>
+<div class="liq-valor" id="val-ils">—</div>
+<div class="liq-ref">Ref: &gt; 1,0</div>
+<div class="liq-status" id="status-ils"></div>
+</div>
+<div class="liquidez-card" id="liq-ili">
+<div class="liq-nome">ILI</div>
+<div class="liq-desc">Liquidez Imediata</div>
+<div class="liq-formula">(Caixa + Bancos + Aplic.) ÷ PC</div>
+<div class="liq-valor" id="val-ili">—</div>
+<div class="liq-ref">Ref: &gt; 0,2</div>
+<div class="liq-status" id="status-ili"></div>
+</div>
+</div>
+</div>
+<!-- IA Balanço -->
+<div class="ia-section">
+<div class="ia-header">
+<i class="fas fa-robot"></i>
+<h4>Análise &amp; Recomendações — IA</h4>
+<button class="btn-ia" onclick="gerarAnaliseIA('balanco')">
+<i class="fas fa-magic"></i> Gerar Análise
+            </button>
+</div>
+<div class="ia-content" id="balancoIAContent">
+<p class="ia-placeholder">Clique em "Gerar Análise" para obter insights automáticos sobre o Balanço Patrimonial</p>
+</div>
+</div>
+</div>
+</div>
+<!-- ═══ ORÇAMENTO ESTÁTICO ═══ -->
+<div class="pg" id="pg-orcamento">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>📊 Orçamento Estático — Plano de Contas</h2>
+</div>
+<div class="filter-bar" style="border:none;box-shadow:none;padding:0;margin:0;background:transparent">
+<div class="filter-group">
+<label>Centro de Custo</label>
+<select class="filter-select" id="orcCC">
+<option value="geral">Geral</option><option value="service">Service</option>
+<option value="fibravit">Fibravit</option><option value="es">ES</option>
+<option value="pa">PA</option><option value="ma">MA</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Mês</label>
+<select class="filter-select" id="orcMes">
+<option value="01">Janeiro</option><option value="02">Fevereiro</option>
+<option value="03">Março</option><option value="04">Abril</option>
+<option value="05">Maio</option><option value="06">Junho</option>
+<option value="07">Julho</option><option value="08">Agosto</option>
+<option value="09">Setembro</option><option selected="" value="10">Outubro</option>
+<option value="11">Novembro</option><option value="12">Dezembro</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Ano</label>
+<select class="filter-select" id="orcAno">
+<option value="2025">2025</option><option selected="" value="2026">2026</option>
+</select>
+</div>
+<div style="display:flex;align-items:flex-end">
+<button class="btn btn-p btn-sm" onclick="carregarOrcamento()">🔍 Carregar</button>
+</div>
+</div>
+</div>
+<div class="table-section" id="orcamentoTableContainer" style="display:none"></div>
+<div class="empty-state" id="orcamentoEmpty">
+<i class="fas fa-chart-pie"></i>
+<h4>Selecione o CC e o mês para lançar o orçamento</h4>
+<p>Clique em <strong>Carregar</strong> para iniciar o lançamento</p>
+</div>
+</div>
+<!-- ═══ PROVISIONAMENTO MENSAL ═══ -->
+<div class="pg" id="pg-provisionamento">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>🔄 Provisionamento Mensal — Orçamento Variável</h2>
+</div>
+<div class="filter-bar" style="border:none;box-shadow:none;padding:0;margin:0;background:transparent">
+<div class="filter-group">
+<label>Centro de Custo</label>
+<select class="filter-select" id="provCC">
+<option value="geral">Geral</option><option value="service">Service</option>
+<option value="fibravit">Fibravit</option><option value="es">ES</option>
+<option value="pa">PA</option><option value="ma">MA</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Mês</label>
+<select class="filter-select" id="provMes">
+<option value="01">Janeiro</option><option value="02">Fevereiro</option>
+<option value="03">Março</option><option value="04">Abril</option>
+<option value="05">Maio</option><option value="06">Junho</option>
+<option value="07">Julho</option><option value="08">Agosto</option>
+<option value="09">Setembro</option><option selected="" value="10">Outubro</option>
+<option value="11">Novembro</option><option value="12">Dezembro</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Ano</label>
+<select class="filter-select" id="provAno">
+<option value="2025">2025</option><option selected="" value="2026">2026</option>
+</select>
+</div>
+<div style="display:flex;align-items:flex-end">
+<button class="btn btn-p btn-sm" onclick="carregarProvisao()">🔍 Carregar</button>
+</div>
+</div>
+</div>
+<div class="alert al-i" style="margin-bottom:16px">
+<i class="fas fa-info-circle"></i>
+<span>O provisionamento traz automaticamente o <strong>Orçamento Fixo</strong> como referência. Preencha a coluna <strong>Provisionamento</strong> com os valores revisados do mês.</span>
+</div>
+<div class="table-section" id="provTableContainer" style="display:none"></div>
+<div class="empty-state" id="provEmpty">
+<i class="fas fa-sync-alt"></i>
+<h4>Selecione o CC e o mês para lançar o provisionamento</h4>
+<p>Clique em <strong>Carregar</strong> para iniciar</p>
+</div>
+</div>
+<!-- ═══ INDICADORES ═══ -->
+<div class="pg" id="pg-indicadores">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>📈 Indicadores — Meta x Realizado x Ano Anterior</h2>
+<button class="btn btn-p btn-sm admin-only" id="btnNovoIndicador" onclick="abrirModalIndicador()" style="display:none">
+            ➕ Novo Indicador
+          </button>
+</div>
+</div>
+<div class="empty-state">
+<i class="fas fa-chart-bar"></i>
+<h4>Nenhum indicador cadastrado</h4>
+<p>Clique em <strong>Novo Indicador</strong> para começar</p>
+</div>
+</div>
+<!-- ═══ USUÁRIOS (Admin only) ═══ -->
+<div class="pg" id="pg-usuarios">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd">
+<h2>👥 Gerenciar Usuários</h2>
+<button class="btn btn-p btn-sm" onclick="abrirModalUsuario()">➕ Novo Usuário</button>
+</div>
+</div>
+<div class="card" style="padding:0">
+<div class="table-responsive">
+<table class="financial-table" id="usuariosTable">
+<thead>
+<tr>
+<th>Nome</th><th>E-mail</th><th>Perfil</th><th>Status</th><th>Ações</th>
+</tr>
+</thead>
+<tbody id="usuariosTableBody">
+<tr><td class="text-center" colspan="5" style="padding:28px;color:#94a3b8">Carregando...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- ═══ CONFIGURAÇÕES ═══ -->
+<div class="pg" id="pg-configuracoes">
+<div class="card" style="margin-bottom:16px">
+<div class="card-hd"><h2>⚙️ Configurações do Sistema</h2></div>
+</div>
+<div class="config-section">
+<h4>🤖 Chave da API — ChatGPT (OpenAI)</h4>
+<div class="form-group">
+<input class="config-input" id="openaiKey" placeholder="sk-..." type="password"/>
+<button class="btn btn-p" onclick="salvarAPIKey()">💾 Salvar</button>
+</div>
+<p class="config-info">A chave é necessária para gerar análises automáticas com IA em todos os módulos</p>
+</div>
+<div class="config-section">
+<h4>🏢 Centros de Custo Cadastrados</h4>
+<div class="cc-list">
+<div class="cc-item"><i class="fas fa-building"></i> Geral</div>
+<div class="cc-item"><i class="fas fa-building"></i> Service</div>
+<div class="cc-item"><i class="fas fa-building"></i> Fibravit</div>
+<div class="cc-item"><i class="fas fa-building"></i> ES</div>
+<div class="cc-item"><i class="fas fa-building"></i> PA</div>
+<div class="cc-item"><i class="fas fa-building"></i> MA</div>
+</div>
+</div>
+<div class="config-section">
+<h4>👥 Perfis de Acesso</h4>
+<div class="cc-list">
+<div class="cc-item"><span class="badge badge-admin">Admin</span>  Acesso total + cadastros</div>
+<div class="cc-item"><span class="badge badge-diretor">Diretor</span>  Acesso total, sem cadastros</div>
+<div class="cc-item"><span class="badge badge-gestor">Coordenador</span>  Visualiza e importa dados</div>
+<div class="cc-item"><span class="badge badge-analista">Analista</span>  Conforme permissão</div>
+</div>
+</div>
+</div>
+</main>
+<!-- RODAPÉ FIXO — PADRÃO FIBRAVIT -->
+<footer class="rodape">
+<div class="rod-txt">
+      G.G.R.F — GESTÃO GERENCIAL DE RESULTADOS FINANCEIROS —
+      <span style="color:#f0c040;font-weight:800">GRUPO FIBRAVIT</span>
+</div>
+<div class="rod-center">
+<div class="rod-dev">Desenvolvido por:</div>
+<div class="rod-name">EVEREST CONSULTORIA</div>
+<div class="rod-sub">em Gestão Empresarial</div>
+</div>
+<div class="rod-azul">v1.0 · 2026</div>
+</footer>
+</div><!-- fim #app -->
+<!-- ═══ MODAL USUÁRIO ═══ -->
+<div class="modal-bg" id="modalUsuario">
+<div class="modal">
+<div class="modal-hd">
+<h3>👤 Novo Usuário</h3>
+<button onclick="fecharModal('modalUsuario')">✕</button>
+</div>
+<div class="modal-bd">
+<div class="alert al-d" id="modalUsuarioErr" style="display:none"></div>
+<form id="formUsuario">
+<div class="form-group"><label>Nome Completo</label>
+<input id="usuarioNome" placeholder="Nome do usuário" required="" type="text"/></div>
+<div class="form-group"><label>E-mail</label>
+<input id="usuarioEmail" placeholder="email@fibravit.com.br" required="" type="email"/></div>
+<div class="form-group"><label>Senha</label>
+<input id="usuarioSenha" placeholder="Mínimo 6 caracteres" required="" type="password"/></div>
+<div class="form-group"><label>Perfil</label>
+<select id="usuarioPerfil" required="">
+<option value="">Selecione...</option>
+<option value="admin">Admin</option>
+<option value="diretor">Diretor</option>
+<option value="coordenador">Coordenador</option>
+<option value="analista">Analista</option>
+</select>
+</div>
+<div class="modal-ft">
+<button class="btn btn-o" onclick="fecharModal('modalUsuario')" type="button">Cancelar</button>
+<button class="btn btn-p" type="submit">✅ Salvar Usuário</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- ═══ MODAL INDICADOR ═══ -->
+<div class="modal-bg" id="modalIndicador">
+<div class="modal">
+<div class="modal-hd">
+<h3>📈 Novo Indicador</h3>
+<button onclick="fecharModal('modalIndicador')">✕</button>
+</div>
+<div class="modal-bd">
+<form id="formIndicador">
+<div class="form-group"><label>Nome do Indicador</label>
+<input id="indNome" placeholder="Ex: Faturamento Bruto" required="" type="text"/></div>
+<div class="form-group"><label>Unidade</label>
+<select id="indUnidade">
+<option value="R$">R$ (Reais)</option>
+<option value="%">% (Percentual)</option>
+<option value="un">Unidade</option>
+<option value="dias">Dias</option>
+</select>
+</div>
+<div class="form-group"><label>Meta</label>
+<input id="indMeta" placeholder="0,00" step="0.01" type="number"/></div>
+<div class="form-group"><label>Ano Anterior</label>
+<input id="indAnoAnterior" placeholder="0,00" step="0.01" type="number"/></div>
+<div class="form-group checkbox-group">
+<label><input id="indDiario" type="checkbox"/> Acompanhamento Diário</label>
+</div>
+<div class="modal-ft">
+<button class="btn btn-o" onclick="fecharModal('modalIndicador')" type="button">Cancelar</button>
+<button class="btn btn-p" type="submit">✅ Salvar Indicador</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/plano-contas.js"></script>
+<script src="js/firebase-config.js" type="module"></script>
+<script src="js/auth.js" type="module"></script>
+<script src="js/app.js" type="module"></script>
+</body>
+</html>
